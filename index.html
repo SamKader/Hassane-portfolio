@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--adapte la page à la largeur de l’écran-->
+    <meta name="description" content="Portfolio de Hassane Samandoulgou - Ingénieur Robotique & Systèmes Embarqués">
+    <title>Hassane Samandoulgou | Ingénieur Robotique</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+
+  
+
+    </head>
+<body>
+
+    <!-- ===== Barre de navigation ===== -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top"> <!-- déclare une barre de navigation Bootstrap-->
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#hero">
+            <!-- Photo d'identité -->
+            <img src="assets/images/profile/photo.png" 
+                alt="Photo de Hassane Samandoulgou" 
+                class="rounded-circle me-2" 
+                width="70" 
+                height="70">
+            
+            <span class="fw-bold">Hassane Samandoulgou</span>
+        </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Basculer la navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#hero">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Compétences</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">Projets Réalisés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">À propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12 hero-content">
+                    <p class="hero-subtitle fade-in">Ingénieur en Electronique et Informatique industrielle</p>
+                    <h1 class="hero-title fade-in">Hassane SAMANDOULGOU</h1>
+                    <p class="hero-description fade-in">
+                        Spécialiste en systèmes embarqués et robotique, je conçois des solutions intelligentes 
+                        qui allient vision par ordinateur, IoT et programmation système.
+                    </p>
+                    <div class="fade-in">
+                        <a href="#projects" class="btn btn-primary-custom me-3">Voir mes projets</a>
+                        <a href="#contact" class="btn btn-outline-custom">Me contacter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SKILLS SECTION ===== -->
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title fade-in">Compétences Techniques</h2>
+            <div class="row g-4">
+
+            <!-- Création des  Cartes compétences -->
+
+                <!-- Langage de programmation -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="skill-card fade-in">
+                        <i class="fas fa-code skill-icon"></i>
+                        <h4>Langages</h4>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">c++</span>
+                            <span class="skill-tag">C</span>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Systeme embarquées -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="skill-card fade-in">
+                        <i class="fas fa-microchip skill-icon"></i>
+                        <h4>Embarqué</h4>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Raspberry pi</span>
+                            <span class="skill-tag">ESP32</span>
+                            <span class="skill-tag">Arduino</span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vision par ordinateur -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="skill-card fade-in">
+                        <i class="fas fa-eye skill-icon"></i>
+                        <h4>Vision IA</h4>
+                        <div class="skill-tags">
+                            <span class="skill-tag">OpenCV</span>
+                            <span class="skill-tag">YOLO</span>
+                            <span class="skill-tag">InsightFace</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conception de logiciels bureautiques -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="skill-card fade-in">
+                        <i class="fas fa-desktop skill-icon"></i>
+
+                        <h4>Conception logicielle</h4>
+                        <div class="skill-tags">
+                            <span class="skill-tag">PyQt</span>
+                            <span class="skill-tag">PySide6</span>
+                            <span class="skill-tag">GTK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modélisation 3D -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="skill-card fade-in">
+                        <i class="fas fa-cube skill-icon"></i>
+                        <h4>Modélisation 3D</h4>
+                        <div class="skill-tags">
+                            <span class="skill-tag">SolidWorks</span>
+                            <span class="skill-tag">Assemblages</span>
+                            <span class="skill-tag">Mise en plan</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROJECTS SECTION ===== -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title fade-in">Projets Réalisés</h2>
+            <div class="row g-4">
+                <!-- Project 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="project-card fade-in">
+                        <div class="project-image">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Système de Sécurité Intelligent</h3>
+                            <p class="project-description">
+                                Système complet intégrant RFID, ESP32-CAM et reconnaissance faciale avec serveur 
+                                TCP multi-clients pour contrôle d'accès sécurisé en temps réel.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">Python</span>
+                                <span class="project-tag">ESP32-CAM</span>
+                                <span class="project-tag">RFID</span>
+                                <span class="project-tag">OpenCV</span>
+                                <span class="project-tag">TCP/IP</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#"><i class="fas fa-external-link-alt"></i> Détails</a>
+                                <a href="#"><i class="fab fa-github"></i> Code</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="project-card fade-in">
+                        <div class="project-image">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Robot Éviteur d'Obstacles</h3>
+                            <p class="project-description">
+                                Robot autonome basé sur Arduino Uno utilisant des capteurs ultrason pour 
+                                détection d'obstacles et navigation intelligente avec contrôle moteur précis.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">Arduino</span>
+                                <span class="project-tag">C/C++</span>
+                                <span class="project-tag">Ultrason</span>
+                                <span class="project-tag">Servo</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="#"><i class="fas fa-external-link-alt"></i> Détails</a>
+                                <a href="#"><i class="fab fa-github"></i> Code</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Robot teléguider -->
+<!-- Robot télécommandé -->
+<div class="col-lg-4 col-md-6">
+    <div class="project-card fade-in">
+
+                <!-- Image du projet -->
+                <img src="assets/images/robot_telecomander/robot.jpg"
+                    alt="Robot télécommandé via Wi-Fi"
+                    class="project-image">
+                <div class="project-content">
+                    <h3 class="project-title">Robot télécommandé via Wi-Fi</h3>
+                    <p class="project-description">
+                        Robot mobile contrôlé à distance via une application desktop
+                        développée en PySide6, communiquant avec un ESP32 par Wi-Fi.
+                    </p>
+                    <div class="project-tags">
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">PySide6</span>
+                        <span class="project-tag">ESP32</span>
+                        <span class="project-tag">Wi-Fi</span>
+                        <span class="project-tag">Robotique</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="projects/robot-telecommande.html">
+                            <i class="fas fa-eye"></i> Détails
+                        </a>
+                        <a href="https://github.com/SamKader/robot-telecomander.git"
+                        target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title fade-in">À Propos</h2>
+            <div class="about-content fade-in">
+                <p class="about-text">
+                    Passionné par la robotique et l'intelligence artificielle, je me spécialise dans la conception 
+                    de systèmes embarqués intelligents. Mon expertise couvre le développement de solutions IoT, 
+                    la vision par ordinateur et l'automatisation industrielle.
+                </p>
+                <p class="about-text">
+                    Avec une solide expérience en programmation système (C, Python) et en électronique embarquée 
+                    (Arduino, ESP32), je transforme des concepts techniques en produits fonctionnels et innovants. 
+                    Je suis constamment à la recherche de nouveaux défis qui allient créativité technique et impact réel.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title fade-in">Contact</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="contact-card fade-in">
+                        <h3 class="mb-4">Travaillons Ensemble</h3>
+                        <p class="text-secondary mb-4">
+                            Vous avez un projet en robotique ou systèmes embarqués ? 
+                            N'hésitez pas à me contacter pour en discuter.
+                        </p>
+                        <div class="social-links">
+                            <a href="mailto:kadersamandoulgou15@gmail.com" class="social-link" title="Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://github.com/SamKader" class="social-link" title="GitHub" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/hassane-samandoulgou-aab834370" class="social-link" title="LinkedIn" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://twitter.com/kadersamandoulgou" class="social-link" title="Twitter" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Hassane Samandoulgou. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

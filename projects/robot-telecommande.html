@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Robot télécommandé via Wi-Fi - Projet de robotique avec ESP32 et PySide6">
+    <title>Robot Télécommandé Wi-Fi | Kader Samandoulgou</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== VARIABLES & RESET ===== */
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #0099cc;
+            --bg-dark: #0a0e27;
+            --bg-darker: #060918;
+            --bg-card: #151932;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .back-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .back-btn {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary);
+            transform: translateX(-5px);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .project-hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            padding-top: 100px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, var(--accent-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--accent-glow) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        /* ===== PRESENTATION SECTION ===== */
+        .presentation-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .presentation-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .presentation-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .objective-box {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .objective-box h4 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== GALLERY SECTION ===== */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-card) 100%);
+            font-size: 4rem;
+            color: var(--primary-color);
+        }
+
+        .gallery-caption {
+            padding: 1.5rem;
+            background: var(--bg-card);
+        }
+
+        .gallery-caption h5 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-caption p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* ===== VIDEO SECTION ===== */
+        .video-container {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        .project-video {
+            width: 80%;
+            height: auto;      /* garde les proportions */
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+
+        .video-wrapper {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background: var(--bg-darker);
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            display: block;
+            border-radius: 15px;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-card) 100%);
+            border-radius: 15px;
+        }
+
+        .video-placeholder i {
+            font-size: 5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .video-placeholder p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* ===== ARCHITECTURE SECTION ===== */
+        .architecture-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .architecture-diagram {
+            background: var(--bg-darker);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 2px dashed rgba(0, 212, 255, 0.3);
+        }
+
+        .architecture-diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .architecture-placeholder {
+            padding: 4rem 2rem;
+            color: var(--primary-color);
+        }
+
+        .architecture-placeholder i {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+        }
+
+        .architecture-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .architecture-list li {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .architecture-list li:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .architecture-list i {
+            color: var(--primary-color);
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .architecture-list strong {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+
+        .architecture-list p {
+            color: var(--text-secondary);
+            margin: 0.5rem 0 0 2.5rem;
+        }
+
+        /* ===== TECHNOLOGIES SECTION ===== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .tech-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: var(--bg-darker);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+            color: var(--bg-darker);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            background: transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--primary-color);
+            color: var(--bg-darker);
+            transform: translateY(-3px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-darker);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .presentation-card,
+            .architecture-card {
+                padding: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary-custom,
+            .btn-outline-custom {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="back-nav">
+        <div class="container">
+            <a href="../index.html#projects" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Retour au Portfolio
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="project-hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h1 class="hero-title">Robot Télécommandé via Wi-Fi</h1>
+                <p class="hero-subtitle">Robot mobile contrôlé par application desktop</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PRESENTATION SECTION ===== -->
+    <section id="presentation">
+        <div class="container">
+            <div class="presentation-card fade-in">
+                <h2 class="section-title">Présentation du Projet</h2>
+                
+                <p class="presentation-text">
+                    Ce projet consiste en la conception et réalisation d'un robot mobile télécommandé via Wi-Fi, 
+                    intégrant des technologies modernes de communication sans fil et d'interface utilisateur. 
+                    Le système permet un contrôle intuitif et en temps réel du robot à travers une application 
+                    desktop développée spécifiquement pour ce projet.
+                </p>
+
+                <p class="presentation-text">
+                    L'architecture du système repose sur une communication bidirectionnelle entre l'application 
+                    de contrôle et le robot, permettant non seulement l'envoi de commandes de mouvement, mais 
+                    également la réception de données de télémétrie et de statut du robot. Cette approche garantit 
+                    une expérience utilisateur fluide et réactive.
+                </p>
+
+                <div class="objective-box">
+                    <h4><i class="fas fa-bullseye"></i> Objectifs du Projet</h4>
+                    <p class="presentation-text mb-0">
+                        • Développer un système de contrôle sans fil fiable pour robot mobile<br>
+                        • Créer une interface utilisateur intuitive et responsive<br>
+                        • Implémenter une communication Wi-Fi stable et sécurisée<br>
+                        • Optimiser la consommation énergétique du système embarqué<br>
+                        • Permettre une extensibilité pour l'ajout de futures fonctionnalités
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== GALLERY SECTION ===== -->
+    <section id="gallery">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Galerie du Projet</h2>
+            <p class="section-subtitle text-center fade-in">Découvrez les différentes étapes et composants du robot</p>
+            
+            <div class="gallery-grid">
+                <!-- Gallery Item 1 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Circuit Électronique</h5>
+                        <p>ESP32 et contrôleurs moteur intégrés</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Interface PySide6</h5>
+                        <p>Application de contrôle moderne et intuitive</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Robot Assemblé</h5>
+                        <p>Système complet et opérationnel</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Communication Wi-Fi</h5>
+                        <p>Connexion stable et réactive</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Moteurs et Châssis</h5>
+                        <p>Système de propulsion du robot</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 6 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-battery-three-quarters"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Système d'Alimentation</h5>
+                        <p>Batterie et gestion de l'énergie</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== VIDEO SECTION ===== -->
+<section id="video">
+    <div class="container">
+        <h2 class="section-title text-center fade-in">Démonstration Vidéo</h2>
+        <p class="section-subtitle text-center fade-in">Découvrez le robot en action</p>
+        
+        <div class="video-container fade-in text-center">
+            <!-- Vidéo HTML5 -->
+            <video class="project-video" controls poster="/assets/robot_telecomander/robot.jpg" width="100%">
+                <source src="/assets/robot_telecomander/video.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos HTML5.
+            </video>
+ 
+        </div>
+    </div>
+</section>
+
+
+
+
+    <!-- ===== ARCHITECTURE SECTION ===== -->
+    <section id="architecture">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Architecture du Système</h2>
+            <p class="section-subtitle text-center fade-in">Structure et communication des composants</p>
+            
+            <div class="architecture-card fade-in">
+                <!-- Schéma d'architecture -->
+                <div class="architecture-diagram">
+                    <!-- Si vous avez le schéma, décommentez la ligne suivante -->
+                    <!-- <img src="../assets/images/projects/robot-architecture.png" alt="Schéma d'architecture"> -->
+                    
+                    <!-- Placeholder pour le schéma -->
+                    <div class="architecture-placeholder">
+                        <i class="fas fa-project-diagram"></i>
+                        <p style="margin-top: 1rem;">Schéma d'architecture système</p>
+                    </div>
+                </div>
+
+                <!-- Liste des composants -->
+                <h3 class="mb-4" style="color: var(--primary-color);">Composants Principaux</h3>
+                <ul class="architecture-list">
+                    <li>
+                        <i class="fas fa-microchip"></i>
+                        <strong>ESP32</strong>
+                        <p>
+                            Microcontrôleur au cœur du robot, gérant la communication Wi-Fi bidirectionnelle 
+                            et le contrôle des moteurs. Programmé en C/C++ avec le framework Arduino.
+                        </p>
+                    </li>
+                    <li>
+                        <i class="fas fa-desktop"></i>
+                        <strong>Application PySide6</strong>
+                        <p>
+                            Interface graphique développée en Python avec PySide6 (Qt for Python). 
+                            Permet le contrôle intuitif du robot via des boutons directionnels et 
+                            l'affichage des informations de télémétrie en temps réel.
+                        </p>
+                    </li>
+                    <li>
+                        <i class="fas fa-wifi"></i>
+                        <strong>Communication Wi-Fi</strong>
+                        <p>
+                            Protocole TCP/IP pour la transmission des commandes et des données. 
+                            Architecture client-serveur avec l'ESP32 comme serveur et l'application 
+                            desktop comme client.
+                        </p>
+                    </li>
+                    <li>
+                        <i class="fas fa-cogs"></i>
+                        <strong>Système Moteur</strong>
+                        <p>
+                            Contrôleurs moteur DC avec pont en H (L298N) pour une gestion précise 
+                            de la vitesse et de la direction. Support des mouvements avant, arrière, 
+                            gauche, droite et rotation sur place.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TECHNOLOGIES SECTION ===== -->
+    <section id="technologies">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Technologies Utilisées</h2>
+            <p class="section-subtitle text-center fade-in">Stack technique du projet</p>
+            
+            <div class="tech-grid">
+                <!-- Tech 1: Python -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <div class="tech-name">Python</div>
+                    <p class="tech-description">
+                        Langage principal pour le développement de l'application de contrôle
+                    </p>
+                </div>
+
+                <!-- Tech 2: PySide6 -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-window-maximize"></i>
+                    </div>
+                    <div class="tech-name">PySide6</div>
+                    <p class="tech-description">
+                        Framework Qt pour créer l'interface graphique moderne et responsive
+                    </p>
+                </div>
+
+                <!-- Tech 3: ESP32 -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="tech-name">ESP32</div>
+                    <p class="tech-description">
+                        Microcontrôleur embarqué avec Wi-Fi et Bluetooth intégrés
+                    </p>
+                </div>
+
+                <!-- Tech 4: Wi-Fi -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="tech-name">Wi-Fi</div>
+                    <p class="tech-description">
+                        Communication sans fil TCP/IP pour contrôle à distance
+                    </p>
+                </div>
+
+                <!-- Tech 5: Robotique -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="tech-name">Robotique Mobile</div>
+                    <p class="tech-description">
+                        Conception mécanique et contrôle de moteurs DC
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ACTION BUTTONS ===== -->
+    <section id="actions" style="padding: 60px 0;">
+        <div class="container">
+            <div class="action-buttons fade-in">
+                <a href="../index.html#projects" class="btn-primary-custom">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au Portfolio
+                </a>
+                <a href="https://github.com/SamKader/robot-telecomander.git" class="btn-outline-custom" target="_blank">
+                    <i class="fab fa-github"></i>
+                    Voir sur GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Kader Samandoulgou. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        // Intersection Observer pour les animations fade-in
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments avec la classe fade-in
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Smooth scroll pour les ancres
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Effet de clic sur les images de la galerie
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Vous pouvez ajouter ici une lightbox ou modal
+                console.log('Image cliquée:', this.querySelector('h5').textContent);
+            });
+        });
+    </script>
+
+</body>
+</html>
