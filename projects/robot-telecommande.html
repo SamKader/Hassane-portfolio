@@ -254,19 +254,21 @@
         }
 
         /* ===== VIDEO SECTION ===== */
-        .video-container {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-        }
-        .project-video {
-            width: 80%;
-            height: auto;      /* garde les proportions */
-            max-width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-        }
+    .video-container {
+        max-width: 900px;     /* largeur max sur PC */
+        margin: 0 auto;       /* centrage */
+        padding: 1.5rem;
+        background: var(--bg-card);
+        border-radius: 20px;
+        border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .project-video {
+        width: 100%;          /* prend toute la largeur du container */
+        height: auto;         /* garde les proportions */
+        border-radius: 12px;
+        display: block;
+    }
 
 
         .video-wrapper {
@@ -525,6 +527,10 @@
                 width: 100%;
                 justify-content: center;
             }
+            .video-container {
+                    max-width: 100%;
+                    padding: 1rem;
+                }
         }
     </style>
 </head>
@@ -673,16 +679,13 @@
         <div class="video-container fade-in text-center">
             <video class="project-video"
                    controls
-                   poster="../assets/robot_telecomander/robot.jpg"
-                   width="80%">
+                   poster="../assets/robot_telecomander/robot.jpg">
                 <source src="../assets/robot_telecomander/video.mp4" type="video/mp4">
                 Votre navigateur ne supporte pas la lecture de vidéos HTML5.
             </video>
         </div>
     </div>
 </section>
-
-
 
 
     <!-- ===== ARCHITECTURE SECTION ===== -->
