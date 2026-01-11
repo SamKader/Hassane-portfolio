@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Robot détecteur d'obstacles autonome - Projet de robotique avec Arduino Uno et capteur ultrason">
+    <title>Robot Détecteur d'Obstacles | Kader Samandoulgou</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== VARIABLES & RESET ===== */
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #0099cc;
+            --bg-dark: #0a0e27;
+            --bg-darker: #060918;
+            --bg-card: #151932;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+            --success-color: #00ff88;
+            --warning-color: #ffa726;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .back-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .back-btn {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary);
+            transform: translateX(-5px);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .project-hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            padding-top: 100px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, var(--accent-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            font-size: 6rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-image {
+            margin: 3rem 0;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .hero-placeholder {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-darker) 100%);
+            font-size: 5rem;
+            color: var(--primary-color);
+        }
+
+        .hero-cta {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: var(--bg-darker);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+            color: var(--bg-darker);
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        /* ===== DESCRIPTION SECTION ===== */
+        .description-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .description-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .description-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .highlight-box h4 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .objectives-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .objectives-list li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .objectives-list li i {
+            color: var(--success-color);
+            margin-top: 0.3rem;
+        }
+
+        /* ===== FONCTIONNEMENT SECTION ===== */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .process-step {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .process-step:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--bg-darker);
+            font-size: 1.2rem;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== TECHNOLOGIES SECTION ===== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .tech-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== VIDEO SECTION ===== */
+        .video-container {
+            max-width: 720px;   /* au lieu de 900px */
+            margin: 0 auto;
+            padding: 1.2rem;
+        }
+
+
+        .project-video {
+            width: 80%;           /* largeur réduite */
+            max-width: 720px;     /* limite largeur */
+            height: auto;         /* garde les proportions */
+            max-height: 400px;    /* limite hauteur */
+            border-radius: 12px;
+            display: block;
+            margin: 0 auto;
+            object-fit: cover;    /* optionnel, pour remplir sans déformer */
+    }
+
+
+        .video-placeholder {
+            width: 100%;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-card) 100%);
+            border-radius: 15px;
+        }
+
+        .video-placeholder i {
+            font-size: 5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* ===== GALLERY SECTION ===== */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-card) 100%);
+            font-size: 4rem;
+            color: var(--primary-color);
+        }
+
+        .gallery-caption {
+            padding: 1.5rem;
+            background: var(--bg-card);
+        }
+
+        .gallery-caption h5 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-caption p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* ===== SKILLS SECTION ===== */
+        .skills-container {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .skill-item i {
+            color: var(--primary-color);
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .skill-item h5 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: var(--bg-darker);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+            color: var(--bg-darker);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            background: transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--primary-color);
+            color: var(--bg-darker);
+            transform: translateY(-3px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-darker);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-icon {
+                font-size: 4rem;
+            }
+
+            .hero-placeholder {
+                height: 300px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .description-card,
+            .skills-container {
+                padding: 2rem;
+            }
+
+            .process-grid,
+            .tech-grid,
+            .gallery-grid,
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary-custom,
+            .btn-outline-custom {
+                width: 100%;
+                justify-content: center;
+            }
+
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .project-video {
+            width: 100%;
+            height: auto;
+            background: #000;
+            border-radius: 12px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="back-nav">
+        <div class="container">
+            <a href="../index.html#projects" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Retour au Portfolio
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="project-hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Robot Détecteur d'Obstacles Autonome</h1>
+                <p class="hero-subtitle">Navigation intelligente sans intervention humaine</p>
+                
+                <div class="hero-image">
+                    <img src="../assets/robot_autonome/image.png" alt="Robot détecteur d'obstacles">
+                </div>
+
+                <a href="#video" class="hero-cta">
+                    <i class="fas fa-play-circle"></i>
+                    Voir la Démonstration
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DESCRIPTION SECTION ===== -->
+    <section id="description">
+        <div class="container">
+            <div class="description-card fade-in">
+                <h2 class="section-title">Présentation du Projet</h2>
+                
+                <p class="description-text">
+                    Ce projet présente la conception et la réalisation d'un robot mobile autonome capable de 
+                    détecter et d'éviter des obstacles sans aucune intervention humaine. Basé sur une architecture 
+                    Arduino Mega, le système intègre des capteurs ultrasoniques et un algorithme de décision intelligent 
+                    permettant au robot de naviguer dans son environnement de manière autonome.
+                </p>
+
+                <p class="description-text">
+                    Le robot utilise un capteur à ultrasons HC-SR04 monté sur un servomoteur SG90 pour effectuer 
+                    un balayage à 180 degrés de son environnement. Cette configuration permet une détection précise 
+                    des obstacles et une prise de décision optimale concernant la trajectoire à suivre. L'ensemble 
+                    du système fonctionne en temps réel, garantissant une réactivité immédiate face aux obstacles.
+                </p>
+
+                <div class="highlight-box">
+                    <h4><i class="fas fa-bullseye"></i> Objectifs du Projet</h4>
+                    <ul class="objectives-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Développer un système de navigation autonome fiable et réactif</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Implémenter un algorithme de détection et d'évitement d'obstacles</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Maîtriser la programmation embarquée sur microcontrôleur Arduino</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Intégrer des capteurs et actionneurs dans un système robotique cohérent</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Créer une solution applicable aux domaines de la robotique mobile et des systèmes embarqués</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FONCTIONNEMENT SECTION ===== -->
+    <section id="fonctionnement" style="background: var(--bg-darker);">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Principe de Fonctionnement</h2>
+            <p class="section-subtitle text-center fade-in">
+                Cycle de détection et de navigation en 4 étapes clés
+            </p>
+
+            <div class="process-grid">
+                <!-- Step 1 -->
+                <div class="process-step fade-in">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <h3 class="step-title">Mesure de Distance</h3>
+                    <p class="step-description">
+                        Le capteur ultrason HC-SR04 émet des ondes sonores et mesure le temps de retour 
+                        pour calculer la distance des obstacles environnants avec une précision de 3mm.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="process-step fade-in">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="step-title">Analyse de l'Obstacle</h3>
+                    <p class="step-description">
+                        Le servomoteur SG90 effectue un balayage à 180° permettant au robot d'analyser 
+                        son environnement et d'identifier la position et la proximité des obstacles.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="process-step fade-in">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="step-title">Décision de Trajectoire</h3>
+                    <p class="step-description">
+                        L'algorithme embarqué analyse les données collectées et détermine la meilleure 
+                        trajectoire à suivre : avancer, tourner à gauche ou à droite, ou reculer.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="process-step fade-in">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h3 class="step-title">Mouvement Automatique</h3>
+                    <p class="step-description">
+                        Les moteurs DC exécutent les commandes calculées, permettant au robot de se 
+                        déplacer de manière fluide tout en évitant les collisions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TECHNOLOGIES SECTION ===== -->
+    <section id="technologies">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Technologies Utilisées</h2>
+            <p class="section-subtitle text-center fade-in">
+                Composants matériels et logiciels du système
+            </p>
+            
+            <div class="tech-grid">
+                <!-- Tech 1: Arduino Uno -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="tech-name">Arduino Uno</div>
+                    <p class="tech-description">
+                        Microcontrôleur principal gérant la logique de contrôle et l'interface avec les capteurs
+                    </p>
+                </div>
+
+                <!-- Tech 2: Capteur Ultrason -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <div class="tech-name">HC-SR04</div>
+                    <p class="tech-description">
+                        Capteur à ultrasons pour mesure de distance de 2cm à 4m avec précision de 3mm
+                    </p>
+                </div>
+
+                <!-- Tech 3: Servo Moteur -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="tech-name">Servo SG90</div>
+                    <p class="tech-description">
+                        Servomoteur permettant la rotation du capteur pour balayage à 180 degrés
+                    </p>
+                </div>
+
+                <!-- Tech 4: Moteurs DC -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-car-battery"></i>
+                    </div>
+                    <div class="tech-name">Moteurs DC</div>
+                    <p class="tech-description">
+                        Système de propulsion avec contrôle de vitesse et direction via pont en H
+                    </p>
+                </div>
+
+                <!-- Tech 5: Programmation C -->
+                <div class="tech-card fade-in">
+                    <div class="tech-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="tech-name">Langage C++</div>
+                    <p class="tech-description">
+                        Programmation embarquée optimisée pour systèmes temps réel et microcontrôleurs
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== VIDEO SECTION ===== -->
+    <section id="video" style="background: var(--bg-darker);">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Démonstration Vidéo</h2>
+            <p class="section-subtitle text-center fade-in">Découvrez le robot en action</p>
+
+            <div class="video-container fade-in">
+            <video class="project-video"
+                       controls
+                       preload="metadata"
+                       playsinline
+                       poster="../assets/robot_autonome/image.png">
+                    <source src="../assets/robot_autonome/robot_mobile.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de vidéos HTML5.
+                </video>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== GALLERY SECTION ===== -->
+    <section id="gallery">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Galerie du Projet</h2>
+            <p class="section-subtitle text-center fade-in">Composants et assemblage du robot</p>
+            
+            <div class="gallery-grid">
+                <!-- Gallery Item 1 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Robot Assemblé</h5>
+                        <p>Système complet avec capteur et moteurs</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Circuit Arduino</h5>
+                        <p>Carte Arduino Mega et connexions électroniques</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Capteur Ultrason</h5>
+                        <p>HC-SR04 monté sur servomoteur SG90</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Schéma de Câblage</h5>
+                        <p>Architecture électronique du système</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Système Moteur</h5>
+                        <p>Moteurs DC avec contrôleur pont en H</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 6 -->
+                <div class="gallery-item fade-in">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h5>Test en Environnement</h5>
+                        <p>Robot naviguant entre les obstacles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SKILLS SECTION ===== -->
+    <section id="skills" style="background: var(--bg-darker);">
+        <div class="container">
+            <h2 class="section-title text-center fade-in">Compétences Acquises</h2>
+            <p class="section-subtitle text-center fade-in">
+                Savoir-faire développés au cours de ce projet
+            </p>
+
+            <div class="skills-container fade-in">
+                <div class="skills-grid">
+                    <!-- Skill 1 -->
+                    <div class="skill-item">
+                        <h5>
+                            <i class="fas fa-robot"></i>
+                            Robotique Autonome
+                        </h5>
+                        <p>
+                            Conception et mise en œuvre de systèmes robotiques capables de prendre 
+                            des décisions autonomes en temps réel
+                        </p>
+                    </div>
+
+                    <!-- Skill 2 -->
+                    <div class="skill-item">
+                        <h5>
+                            <i class="fas fa-code-branch"></i>
+                            Algorithmique Embarquée
+                        </h5>
+                        <p>
+                            Développement d'algorithmes optimisés pour microcontrôleurs avec 
+                            contraintes de mémoire et de puissance de calcul
+                        </p>
+                    </div>
+
+                    <!-- Skill 3 -->
+                    <div class="skill-item">
+                        <h5>
+                            <i class="fas fa-sensor"></i>
+                            Capteurs & Actionneurs
+                        </h5>
+                        <p>
+                            Intégration et calibration de capteurs ultrasoniques, servomoteurs 
+                            et moteurs DC dans un système cohérent
+                        </p>
+                    </div>
+
+                    <!-- Skill 4 -->
+                    <div class="skill-item">
+                        <h5>
+                            <i class="fas fa-clock"></i>
+                            Systèmes Temps Réel
+                        </h5>
+                        <p>
+                            Gestion des contraintes temporelles pour une réactivité immédiate 
+                            face aux obstacles détectés
+                        </p>
+                    </div>
+
+                    <!-- Skill 5 -->
+                    <div class="skill-item">
+                        <h5>
+                            <i class="fas fa-microchip"></i>
+                            Programmation Embarquée
+                        </h5>
+                        <p>
+                            Maîtrise de la programmation en C++ pour Arduino avec gestion des 
+                            interruptions et des timers
+                        </p>
+                    </div>
+
+                    <!-- Skill 6 -->
+                    <div class="skill-item">
+                        <h5>
+                            <i class="fas fa-tools"></i>
+                            Intégration Électronique
+                        </h5>
+                        <p>
+                            Conception de circuits électroniques, câblage et gestion de 
+                            l'alimentation des composants
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ACTION BUTTONS ===== -->
+    <section id="actions" style="padding: 60px 0;">
+        <div class="container">
+            <div class="action-buttons fade-in">
+                <a href="../index.html#projects" class="btn-primary-custom">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au Portfolio
+                </a>
+                <a href="https://github.com/SamKader/Robot.git" class="btn-outline-custom" target="_blank">
+                    <i class="fab fa-github"></i>
+                    Voir sur GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Kader Samandoulgou. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        // Intersection Observer pour les animations fade-in
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments avec la classe fade-in
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Smooth scroll pour les ancres
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Effet de clic sur les images de la galerie
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                console.log('Image cliquée:', this.querySelector('h5').textContent);
+            });
+        });
+    </script>
+
+</body>
+</html>
