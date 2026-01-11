@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système de Gestion d'Accès Intelligent - RFID & Reconnaissance Faciale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+            color: #e4e4e7;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 15, 25, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        /* ===== LOGO ===== */
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00d4ff;
+            letter-spacing: 1px;
+        }
+
+        /* ===== LINKS ===== */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a:hover {
+            color: #00d4ff;
+        }
+
+        /* ===== MENU TOGGLE (HAMBURGER) ===== */
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: #00d4ff;
+            cursor: pointer;
+        }
+
+        .nav-links a {
+            color: #a1a1aa;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 8rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -250px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            color: #3b82f6;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #a1a1aa;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        .hero .cta-button i {
+        font-size: 1.5rem;
+        vertical-align: middle;
+        margin: 0 0.5rem;
+        }
+
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #a1a1aa;
+            margin-bottom: 4rem;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .project-intro {
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid #3b82f6;
+            padding: 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .arch-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .arch-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        /* ===== Image architecture ===== */
+        .arch-card .composants img {
+            width: 80%;       /* réduit la largeur à 80% du conteneur */
+            max-width: 150px; /* ne dépassera jamais 150px */
+            height: auto;     /* garde les proportions */
+            display: block;   /* évite les problèmes de margin */
+            margin: 0 auto;   /* centre l'image horizontalement */
+            border-radius: 8px; /* optionnel, arrondir les coins */
+        }
+
+
+        .arch-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .arch-card h3 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 8px;
+            border-left: 3px solid #3b82f6;
+            transition: background 0.3s;
+        }
+
+        .feature-item:hover {
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        .feature-content h4 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .tech-category {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .tech-category h4 {
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .tech-list {
+            list-style: none;
+        }
+
+        .tech-list li {
+            padding: 0.5rem 0;
+            color: #d4d4d8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tech-list li::before {
+            content: '▸';
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .security-item {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-align: center;
+        }
+
+        .security-item h4 {
+            color: #ffffff;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .video-placeholder {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .play-icon {
+            font-size: 4rem;
+            color: #3b82f6;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .conclusion p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+                /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: var(--bg-darker);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+            color: var(--bg-darker);
+        }
+        .btn-outline-custom {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            background: transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--primary-color);
+            color: var(--bg-darker);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            background: rgba(15, 20, 25, 0.95);
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            margin-top: 5rem;
+        }
+
+@media (max-width: 768px) {
+
+    /* ================= HEADER / NAVBAR ================= */
+
+    header {
+        padding: 0;
+    }
+
+    nav.container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.6rem 1rem;
+        position: relative;
+    }
+
+    /* Logo */
+    .logo {
+        font-size: 1.1rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    /* Bouton Hamburger */
+    .menu-toggle {
+        display: block;
+        font-size: 1.8rem;
+        background: none;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        padding: 0.4rem 0.6rem;
+        border-radius: 8px;
+        transition: background 0.3s ease;
+    }
+
+    .menu-toggle:hover {
+        background: rgba(0, 212, 255, 0.12);
+    }
+
+    /* ================= MENU DÉROULANT ================= */
+
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 15, 25, 0.97);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-top: 1px solid rgba(0, 212, 255, 0.15);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    /* Items */
+    .nav-links li {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.4rem;
+    }
+
+    .nav-links li:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Liens */
+    .nav-links li a {
+        width: 90%;
+        padding: 0.6rem 0;
+        font-size: 1rem;
+        text-align: center;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .nav-links li a:hover {
+        background: rgba(0, 212, 255, 0.18);
+        transform: scale(1.02);
+    }
+
+    /* ================= HERO ================= */
+
+    .hero {
+        padding: 70px 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero h2 {
+        font-size: 1.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    /* Boutons en bloc et largeur max */
+    .hero .cta-button {
+        display: block;
+        width: 90%;
+        margin: 0.5rem auto;
+        padding: 0.7rem 0;
+        font-size: 0.95rem;
+    }
+
+    /* ================= GRIDS ================= */
+
+    .architecture-grid,
+    .features-grid,
+    .tech-grid,
+    .security-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* ================= BADGES ================= */
+
+    .badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.85rem;
+        border-radius: 20px;
+        margin: 0.2rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+<header>
+    <nav class="container navbar">
+        <div class="logo">Système de gestion d'accès</div>
+
+        <div class="menu-toggle" id="menu-toggle">
+            ☰
+        </div>
+
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#presentation">Présentation</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+            <li><a href="#technologies">Technologies</a></li>
+            <li><a href="#demo">Démonstration</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+    <section class="hero">
+        <div class="container">
+            <h1>Système de Gestion d'Accès Intelligent</h1>
+            <h2>Badge RFID & Reconnaissance Faciale</h2>
+            <p>Solution de contrôle d'accès combinant authentification physique et biométrique pour une sécurité maximale</p>
+        <a href="../index.html#projects" class="cta-button">
+            <i class="fas fa-arrow-left"></i> Retour au Portfolio
+        </a>
+        <a href="#demo" class="cta-button">
+            Voir la démonstration <i class="fas fa-arrow-right"></i>
+        </a>
+
+
+        </div>
+    </section>
+
+    <section id="presentation">
+        <div class="container">
+            <h2 class="section-title">Présentation du Projet</h2>
+            <p class="section-subtitle">Une solution de sécurité innovante basée sur l'IoT</p>
+            
+            <div class="project-intro">
+                <p>
+                    Ce projet vise à concevoir un <strong>système de contrôle d'accès sécurisé</strong> combinant des méthodes d'authentification physiques et biométriques. Le système repose sur une architecture hybride intégrant des composants embarqués (Arduino Mega, ESP32-CAM) et une application desktop Python pour la gestion intelligente des accès.
+                </p>
+                <p style="margin-top: 1rem;">
+                    L'utilisateur peut s'identifier via un <strong>badge RFID</strong> ou par <strong>reconnaissance faciale</strong>. Le système vérifie les autorisations en temps réel, puis accorde ou refuse l'accès avec des retours visuels et sonores (LED, buzzer), garantissant une expérience utilisateur fluide et sécurisée.
+                </p>
+                <div style="margin-top: 1.5rem;">
+                    <span class="badge">Temps Réel</span>
+                    <span class="badge">Multi-Utilisateurs</span>
+                    <span class="badge">Sécurisé</span>
+                    <span class="badge">IoT</span>
+                    <span class="badge">Intelligence Artificielle</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture">
+        <div class="container">
+            <h2 class="section-title">Architecture du Système</h2>
+            <p class="section-subtitle">Une infrastructure distribuée et modulaire composé de 2 grande partie:
+                une partie centrale et parties périphériques
+            </p>
+            
+            <div class="architecture-grid">
+                <div class="arch-card">
+                    <div class="composants"><img src="../assets/gestion_access/arduino_mega_2560.png" alt=""></div>
+                    <h3>Arduino Mega</h3>
+                    <p>Contrôle des périphériques RFID (RC522), gestion des LED et buzzer. Machine à états pour orchestrer le processus d'authentification.</p>
+                </div>
+                
+                <div class="arch-card">
+                    <div class="composants"><img src="../assets/gestion_access/ESP32-CAM.png" alt=""></div>
+                    <h3>ESP32-CAM</h3>
+                    <p>Capture d'images haute résolution, communication TCP/IP avec le serveur Python. Gestion intelligente des reconnexions.</p>
+                </div>
+                
+                <div class="arch-card">
+                    <div class="composants"><img src="../assets/gestion_access/python.png" alt=""></div>
+                    <h3>Application Python</h3>
+                    <p>Serveur TCP, reconnaissance faciale via InsightFace et OpenCV, gestion base de données utilisateurs, interface graphique PySide6.</p>
+                </div>
+                
+                <div class="arch-card">
+                    <div class="composants"><img src="../assets/gestion_access/icon.png" alt=""></div>
+                    <h3>Communication</h3>
+                    <p>UART entre Arduino et ESP32, TCP/IP entre ESP32 et serveur Python. Protocole de communication robuste avec gestion d'erreurs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="fonctionnalites" style="background: rgba(15, 20, 25, 0.5);">
+        <div class="container">
+            <h2 class="section-title">Fonctionnalités Principales</h2>
+            <p class="section-subtitle">Des capacités avancées pour une sécurité optimale</p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-content">
+                        <h4>Lecture UID RFID</h4>
+                        <p>Détection et lecture instantanée des badges RFID avec validation côté serveur</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-content">
+                        <h4>Reconnaissance Faciale</h4>
+                        <p>Identification biométrique en temps réel utilisant des réseaux de neurones profonds</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-content">
+                        <h4>Gestion Multi-Utilisateurs</h4>
+                        <p>Base de données extensible pour gérer plusieurs profils avec autorisations personnalisées</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+
+                    <div class="feature-content">
+                        <h4>Historique des Accès</h4>
+                        <p>Journalisation complète de tous les événements avec horodatage et statut</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+
+                    <div class="feature-content">
+                        <h4>Gestion des Erreurs</h4>
+                        <p>Reconnexion automatique, timeouts intelligents et récupération d'état</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+
+                    <div class="feature-content">
+                        <h4>Validation Croisée</h4>
+                        <p>Vérification simultanée UID + reconnaissance faciale pour une sécurité renforcée</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="technologies">
+        <div class="container">
+            <h2 class="section-title">Technologies Utilisées</h2>
+            <p class="section-subtitle">Stack technique moderne et performant</p>
+            
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h4> Matériel</h4>
+                    <ul class="tech-list">
+                        <li>Arduino Mega 2560</li>
+                        <li>ESP32-CAM AI-Thinker</li>
+                        <li>Module RFID RC522</li>
+                        <li>LED  & Buzzer</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4> Logiciel</h4>
+                    <ul class="tech-list">
+                        <li>Python 3.10+</li>
+                        <li>OpenCV</li>
+                        <li>InsightFace</li>
+                        <li>ONNX Runtime</li>
+                        <li>PySide6 (Qt)</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4> Communication</h4>
+                    <ul class="tech-list">
+                        <li>UART (Serial)</li>
+                        <li>TCP/IP Socket</li>
+                        <li>Protocole personnalisé</li>
+                        
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4>Intelligence Artificielle</h4>
+                    <ul class="tech-list">
+                        <li>Détection de visage</li>
+                        <li>Extraction caracteristiques</li>
+                        <li>Similarité cosinus</li>
+                        <li>Modèle ONNX optimisé</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="securite" style="background: rgba(15, 20, 25, 0.5);">
+        <div class="container">
+            <h2 class="section-title">Sécurité & Fiabilité</h2>
+            <p class="section-subtitle">Conception robuste pour une protection maximale</p>
+            
+            <div class="security-grid">
+                <div class="security-item">
+                    <h4>Vérification Double</h4>
+                    <p>Authentification combinée UID RFID + reconnaissance faciale pour éliminer les faux positifs</p>
+                </div>
+                
+                <div class="security-item">
+                    <h4>Protection Anti-Intrusion</h4>
+                    <p>Refus automatique des accès non autorisés avec alertes visuelles et sonores</p>
+                </div>
+                
+                <div class="security-item">
+        
+                    <h4>Gestion des Erreurs</h4>
+                    <p>Détection et récupération des erreurs critiques, reconnexion automatique des composants</p>
+                </div>
+                
+                <div class="security-item">
+                    
+                    <h4>Logs & Traçabilité</h4>
+                    <p>Enregistrement complet de tous les événements avec horodatage et état système</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo">
+        <div class="container">
+            <h2 class="section-title">Démonstration Vidéo</h2>
+            <p class="section-subtitle">Découvrez le système en action</p>
+            
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <div class="play-icon">▶</div>
+                    <p style="color: #a1a1aa;">Vidéo de démonstration à venir</p>
+                    <p style="color: #71717a; font-size: 0.9rem;">Le système en fonctionnement réel</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <div class="conclusion">
+                <h2 class="section-title" style="margin-bottom: 2rem;">Conclusion</h2>
+                <p>
+                    Ce projet illustre mes compétences en <strong>systèmes embarqués</strong>, <strong>vision par ordinateur</strong> et <strong>développement logiciel</strong> appliqués à la sécurité intelligente. L'intégration harmonieuse de composants matériels hétérogènes (Arduino, ESP32) avec des algorithmes d'intelligence artificielle démontre une maîtrise technique complète de la chaîne IoT, de la capture de données à la prise de décision automatisée.
+                </p>
+            </div>
+        </div>
+    </section>
+    <!-- ===== ACTION BUTTONS ===== -->
+    <section id="actions" style="padding: 60px 0;">
+        <div class="container">
+            <div class="action-buttons fade-in">
+                <a href="../index.html#projects" class="btn-primary-custom">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au Portfolio
+                </a>
+                <a href="https://github.com/SamKader/Robot.git" class="btn-outline-custom" target="_blank">
+                    <i class="fab fa-github"></i>
+                    Voir sur GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p style="color: #71717a;">© 2025 Système de Gestion d'Accès Intelligent</p>
+        </div>
+    </footer>
+<script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const navItems = document.querySelectorAll('.nav-links a');
+
+    // Ouvrir / fermer le menu avec le bouton hamburger
+    menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+
+    // Fermer le menu après clic sur un lien
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+        });
+    });
+</script>
+
+</script>
+
+</body>
+</html>

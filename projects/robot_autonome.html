@@ -147,18 +147,18 @@
             margin-bottom: 2rem;
         }
 
+        /* ===== HERO IMAGE ===== */
         .hero-image {
-            margin: 3rem 0;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid rgba(0, 212, 255, 0.2);
-            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+            text-align: center;    /* centre l'image */
+            margin: 1rem 0;        /* espace au-dessus et en dessous */
         }
 
         .hero-image img {
-            width: 100%;
-            height: auto;
-            display: block;
+            width: 50%;           /* taille par défaut sur PC */
+            max-width: 100%;      /* ne dépasse jamais le conteneur */
+            height: auto;          /* garde les proportions */
+            border-radius: 10px;   /* coins arrondis */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* ombre légère */
         }
 
         .hero-placeholder {
@@ -1049,7 +1049,7 @@
     <!-- ===== FOOTER ===== -->
     <footer>
         <div class="container">
-            <p>&copy; 2024 Kader Samandoulgou. Tous droits réservés.</p>
+            <p>&copy; 2024 Hassane SAMANDOULGOU. Tous droits réservés.</p>
         </div>
     </footer>
 

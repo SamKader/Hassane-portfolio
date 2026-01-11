@@ -115,25 +115,18 @@
             max-width: 900px;
             margin: 0 auto;
         }
+        /* ===== HERO IMAGE ===== */
         .hero-image {
-            margin: 3rem 0;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid rgba(0, 212, 255, 0.2);
-            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+            text-align: center;    /* centre l'image */
+            margin: 1rem 0;        /* espace au-dessus et en dessous */
         }
 
         .hero-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .hero-icon {
-            font-size: 5rem;
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            animation: float 3s ease-in-out infinite;
+            width: 50%;           /* taille par défaut sur PC */
+            max-width: 100%;      /* ne dépasse jamais le conteneur */
+            height: auto;          /* garde les proportions */
+            border-radius: 10px;   /* coins arrondis */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* ombre légère */
         }
 
         @keyframes float {
@@ -155,6 +148,27 @@
             font-size: 1.5rem;
             color: var(--text-secondary);
             margin-bottom: 2rem;
+        }
+                .hero-cta {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: var(--bg-darker);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+            color: var(--bg-darker);
         }
 
         /* ===== SECTIONS ===== */
@@ -568,7 +582,7 @@
             <div class="hero-content">
                 <h1 class="hero-title">Robot Télécommandé via Wi-Fi</h1>
                 <p class="hero-subtitle">Robot mobile contrôlé par application desktop</p>
-                                <div class="hero-image">
+                <div class="hero-image">
                     <img src="../assets/robot_telecomander/robot.jpg" alt="Robot détecteur d'obstacles">
                 </div>
 
