@@ -342,23 +342,20 @@
         }
 
         .video-container {
-            max-width: 900px;
-            margin: 3rem auto;
+            max-width: 720px;   /* au lieu de 900px */
+            margin: 0 auto;
+            padding: 1.2rem;
+        }
+            .project-video {
+            width: 100%;           /* largeur réduite */
+            max-width: 720px;     /* limite largeur */
+            height: auto;         /* garde les proportions */
+            max-height: 800px;    /* limite hauteur */
             border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .video-placeholder {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            aspect-ratio: 16/9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 1rem;
-        }
+            display: block;
+            margin: 0 auto;
+            object-fit: cover;    /* optionnel, pour remplir sans déformer */
+    }
 
         .play-icon {
             font-size: 4rem;
@@ -805,20 +802,21 @@
         </div>
     </section>
 
-    <section id="demo">
-        <div class="container">
-            <h2 class="section-title">Démonstration Vidéo</h2>
-            <p class="section-subtitle">Découvrez le système en action</p>
-            
-            <div class="video-container">
-                <div class="video-placeholder">
-                    <div class="play-icon">▶</div>
-                    <p style="color: #a1a1aa;">Vidéo de démonstration à venir</p>
-                    <p style="color: #71717a; font-size: 0.9rem;">Le système en fonctionnement réel</p>
-                </div>
-            </div>
+<section id="demo">
+    <div class="container">
+        <h2 class="section-title text-center fade-in">Démonstration Vidéo</h2>
+        <p class="section-subtitle text-center fade-in">Découvrez le robot en action</p>
+
+        <div class="video-container fade-in text-center">
+            <video class="project-video"
+                   controls
+                   poster="../assets/gestion_access/image.png">
+                <source src="../assets/gestion_access/Video.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos HTML5.
+            </video>
         </div>
-    </section>
+    </div>
+</section>
 
     <section>
         <div class="container">
@@ -838,7 +836,7 @@
                     <i class="fas fa-arrow-left"></i>
                     Retour au Portfolio
                 </a>
-                <a href="https://github.com/SamKader/Robot.git" class="btn-outline-custom" target="_blank">
+                <a href="https://github.com/SamKader/security_project" class="btn-outline-custom" target="_blank">
                     <i class="fab fa-github"></i>
                     Voir sur GitHub
                 </a>
