@@ -86,6 +86,54 @@
         }
 
         /* ===== HERO SECTION ===== */
+        
+        .hero-photo-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Cercle lumineux derrière la photo */
+        .hero-photo-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 110%; height: 110%;
+            top: -5%; left: -5%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        /* Anneau décoratif */
+        .hero-photo-wrapper::after {
+            content: '';
+            position: absolute;
+            width: 105%; height: 105%;
+            top: -2.5%; left: -2.5%;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            animation: rotate 12s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50%       { transform: scale(1.05); opacity: 1; }
+        }
+
+        .hero-photo {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
         #hero {
             min-height: 100vh;
             display: flex;
@@ -472,6 +520,13 @@
         line-height: 1.4;
         text-align: center;
     }
+
+    .hero-photo { width: 220px; height: 220px; }
+    .col-lg-5 { margin-top: 2.5rem; }
+    
+
+    .hero-photo { width: 180px; height: 180px; }
+    
 
     /* ===== Sections ===== */
     section {
