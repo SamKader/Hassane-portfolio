@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElecStock — Gestion de Stock Électronique | Hassane Samandoulgou</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts — identiques à index.html -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== VARIABLES — identiques à style.css ===== */
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #0099cc;
+            --bg-dark: #0a0e27;
+            --bg-darker: #060918;
+            --bg-card: #151932;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-darker); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 5px; }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled { box-shadow: 0 4px 30px rgba(0, 212, 255, 0.1); }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color) !important;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+            margin: 0 0.4rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-link:hover { color: var(--primary-color) !important; }
+        .nav-link::after {
+            content: '';
+            position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* ===== HERO ===== */
+        #hero {
+            min-height: 65vh;
+            display: flex; align-items: center;
+            padding: 8rem 0 5rem;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, var(--accent-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--accent-glow) 0%, transparent 50%);
+            animation: float 10s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content { position: relative; z-index: 2; }
+
+        .hero-subtitle {
+            color: var(--primary-color);
+            font-size: 1rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem; max-width: 700px;
+        }
+
+        .hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+        .hero-tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            padding: 0.3rem 1rem; border-radius: 20px;
+            font-size: 0.8rem; font-family: 'Fira Code', monospace;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none; padding: 0.9rem 2.2rem;
+            font-size: 1rem; font-weight: 600; border-radius: 50px;
+            color: var(--bg-darker); transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+            color: var(--bg-darker);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color); padding: 0.9rem 2.2rem;
+            font-size: 1rem; font-weight: 600; border-radius: 50px;
+            background: transparent; transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-outline-custom:hover {
+            background: var(--primary-color);
+            color: var(--bg-darker); transform: translateY(-3px);
+        }
+
+        /* ===== SECTIONS ===== */
+        section { padding: 80px 0; position: relative; }
+        .section-dark { background: var(--bg-darker); }
+
+        .section-title {
+            font-size: 2.2rem; font-weight: 700;
+            text-align: center; margin-bottom: 1rem;
+        }
+        .section-title::after {
+            content: '';
+            display: block; width: 80px; height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            margin: 1rem auto; border-radius: 2px;
+        }
+        .section-subtitle {
+            text-align: center; color: var(--text-secondary);
+            font-size: 1.05rem; margin-bottom: 3rem;
+        }
+
+        /* ===== INTRO CARD ===== */
+        .intro-card {
+            background: var(--bg-card);
+            border-radius: 15px; padding: 2.5rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-left: 4px solid var(--primary-color);
+            font-size: 1.05rem; line-height: 1.9;
+            color: var(--text-secondary);
+        }
+        .intro-card strong { color: var(--primary-color); }
+        .intro-card p + p { margin-top: 1rem; }
+
+        /* ===== BADGES ===== */
+        .badge-custom {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary-color);
+            padding: 0.4rem 1rem; border-radius: 20px;
+            font-size: 0.82rem; font-family: 'Fira Code', monospace;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            display: inline-block; margin: 0.25rem;
+        }
+
+        /* ===== ARCH CARDS ===== */
+        .arch-card {
+            background: var(--bg-card);
+            border-radius: 15px; padding: 2rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s; height: 100%;
+            text-align: center;
+        }
+        .arch-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        .arch-icon {
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+        }
+        .arch-card h5 {
+            color: var(--primary-color);
+            font-size: 1.2rem; font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+        .arch-card p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.7; margin: 0; }
+
+        /* ===== FEATURE ITEMS ===== */
+        .feature-item {
+            background: var(--bg-card);
+            border-radius: 12px; padding: 1.6rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+            transition: all 0.3s; height: 100%;
+        }
+        .feature-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+        }
+        .feature-item h5 {
+            color: var(--text-primary);
+            font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;
+        }
+        .feature-item p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.7; margin: 0; }
+
+         /* ===== SCREEN CARDS ===== */
+        .screen-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+            backdrop-filter: blur(5px);
+            height: 100%;
+        }
+
+        .screen-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .screen-preview {
+            padding: 1.5rem;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screen-img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            display: block;
+            transition: transform 0.3s;
+            border-radius: 8px;
+        }
+
+        .screen-card:hover .screen-img {
+            transform: scale(1.02);
+        }
+
+        .screen-info {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(0, 212, 255, 0.15);
+        }
+
+        .screen-info h5 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .screen-info p {
+            color: #a1a1aa;
+            font-size: 0.85rem;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .col-md-6 {
+            flex: 0 0 auto;
+            width: 50%;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .col-lg-4 {
+            flex: 0 0 auto;
+            width: 33.33333333%;
+        }
+
+        .col-lg-3 {
+            flex: 0 0 auto;
+            width: 25%;
+        }
+
+        @media (max-width: 768px) {
+            .col-md-6, .col-lg-4, .col-lg-3 {
+                width: 100%;
+            }
+        }
+
+        .text-center { text-align: center; }
+        .mb-5 { margin-bottom: 3rem; }
+        .py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+        .g-4 { gap: 1.5rem; }
+        .g-3 { gap: 1rem; }
+
+        /* ===== TECH CARDS ===== */
+        .tech-card {
+            background: var(--bg-card);
+            border-radius: 15px; padding: 2rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s; height: 100%;
+        }
+        .tech-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+        }
+        .tech-card h5 {
+            color: var(--primary-color);
+            font-size: 1rem; font-weight: 600;
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 1.2rem; padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        .tech-list { list-style: none; padding: 0; }
+        .tech-list li {
+            padding: 0.45rem 0; color: var(--text-secondary);
+            font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .tech-list li:last-child { border-bottom: none; }
+        .tech-list li::before { content: '▸'; color: var(--primary-color); font-size: 0.7rem; flex-shrink: 0; }
+
+        /* ===== VIDEO ===== */
+        .video-wrapper {
+            border-radius: 15px; overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 800px; margin: 0 auto;
+        }
+        .video-wrapper video { width: 100%; display: block; }
+
+        /* ===== CONCLUSION ===== */
+        .conclusion-card {
+            background: var(--bg-card);
+            border-radius: 15px; padding: 3rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            text-align: center;
+        }
+        .conclusion-card p {
+            font-size: 1.05rem; color: var(--text-secondary);
+            line-height: 1.9; max-width: 820px; margin: 0 auto;
+        }
+        .conclusion-card strong { color: var(--primary-color); }
+
+        .perspectives-list {
+            list-style: none; padding: 0;
+            max-width: 600px; margin: 0 auto 2rem;
+            text-align: left;
+        }
+        .perspectives-list li {
+            padding: 0.5rem 0; color: var(--text-secondary);
+            font-size: 1rem; display: flex; align-items: center; gap: 10px;
+        }
+        .perspectives-list li i { color: var(--primary-color); width: 20px; }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-darker);
+            padding: 2rem 0; text-align: center;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        footer p { color: var(--text-secondary); margin: 0; }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            #hero { padding: 7rem 0 4rem; min-height: auto; }
+            .hero-title { font-size: 2rem; }
+            .btn-primary-custom, .btn-outline-custom {
+                display: block; width: 100%;
+                margin-bottom: 0.8rem; text-align: center; justify-content: center;
+            }
+            section { padding: 50px 0; }
+            .section-title { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="../index.html">
+            <i class="fas fa-arrow-left me-2" style="font-size:0.85rem;"></i>
+            Hassane Samandoulgou
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#presentation">Présentation</a></li>
+                <li class="nav-item"><a class="nav-link" href="#architecture">Architecture</a></li>
+                <li class="nav-item"><a class="nav-link" href="#fonctionnalites">Fonctionnalités</a></li>
+                <li class="nav-item"><a class="nav-link" href="#screens">Interfaces</a></li>
+                <li class="nav-item"><a class="nav-link" href="#technologies">Technologies</a></li>
+                <li class="nav-item"><a class="nav-link" href="#demo">Démo</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content">
+            <p class="hero-subtitle fade-in">Application Desktop · Gestion de Stock</p>
+            <h1 class="hero-title fade-in">ElectroStock</h1>
+            <p class="hero-description fade-in">
+                Application de bureau complète pour la gestion de stock de composants électroniques.
+                Architecture hybride Python/C combinant une interface graphique moderne PySide6
+                et un backend natif performant en C avec base de données SQLite.
+            </p>
+            <div class="hero-tags fade-in">
+                <span class="hero-tag">PySide6 / Qt</span>
+                <span class="hero-tag">C99 / CFFI</span>
+                <span class="hero-tag">SQLite3</span>
+                <span class="hero-tag">Matplotlib</span>
+                <span class="hero-tag">Multi-thèmes</span>
+            </div>
+            <div class="d-flex gap-3 flex-wrap fade-in">
+                <a href="#presentation" class="btn-primary-custom">
+                    <i class="fas fa-arrow-down"></i> Découvrir
+                </a>
+                <a href="https://github.com/SamKader/ElecStock.git" target="_blank" class="btn-outline-custom">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PRÉSENTATION ===== -->
+<section id="presentation" class="section-dark">
+    <div class="container">
+        <h2 class="section-title fade-in">Présentation du Projet</h2>
+        <p class="section-subtitle fade-in">Une gestion de stock professionnelle et performante</p>
+
+        <div class="intro-card fade-in mb-4">
+            <p>
+                ElectroStock est une <strong>application desktop complète</strong> conçue pour la gestion
+                de stock de composants électroniques. Elle permet de suivre les références, quantités,
+                emplacements et fournisseurs, tout en offrant des outils de vente, de facturation et
+                d'analyse statistique en temps réel.
+            </p>
+            <p>
+                L'application repose sur une <strong>architecture hybride</strong> : l'interface utilisateur
+                est développée en Python avec PySide6 (Qt), tandis que toute la logique métier critique
+                (gestion du stock, transactions, authentification) est implémentée en <strong>C natif</strong>,
+                exposée à Python via une interface CFFI. Cette approche garantit à la fois une UI moderne
+                et réactive, et des opérations sur la base de données rapides et fiables.
+            </p>
+        </div>
+
+        <div class="text-center fade-in">
+            <span class="badge-custom">Backend C natif</span>
+            <span class="badge-custom">Transactions atomiques</span>
+            <span class="badge-custom">4 thèmes visuels</span>
+            <span class="badge-custom">Facturation PDF</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ARCHITECTURE ===== -->
+<section id="architecture">
+    <div class="container">
+        <h2 class="section-title fade-in">Architecture du Système</h2>
+        <p class="section-subtitle fade-in">Une infrastructure modulaire entre Python et C</p>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-desktop"></i></div>
+                    <h5>PySide6 / Qt</h5>
+                    <p>Interface graphique complète avec Qt Designer : fenêtre principale, dialogs, splashscreen et thèmes QSS personnalisés.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-microchip"></i></div>
+                    <h5>Backend C / CFFI</h5>
+                    <p>Logique métier en C99 compilée en bibliothèque dynamique, exposée à Python via un bridge CFFI sur mesure.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-database"></i></div>
+                    <h5>SQLite3</h5>
+                    <p>Base de données embarquée avec 8 tables et 3 vues, transactions atomiques pour ventes et mouvements de stock.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h5>Matplotlib</h5>
+                    <p>Dashboard statistique intégré avec graphiques dynamiques : ventes, répartition par catégorie, valeur du stock.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FONCTIONNALITÉS ===== -->
+<section id="fonctionnalites" class="section-dark">
+    <div class="container">
+        <h2 class="section-title fade-in">Fonctionnalités Principales</h2>
+        <p class="section-subtitle fade-in">Un système de gestion de stock complet et professionnel</p>
+
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-boxes-stacked me-2" style="color:var(--primary-color)"></i>Gestion de stock</h5>
+                    <p>Ajout, modification, suppression de composants. Recherche et filtrage en direct par référence ou catégorie.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-cart-shopping me-2" style="color:var(--primary-color)"></i>Panier & Ventes</h5>
+                    <p>Système de panier complet avec fusion automatique des quantités, calcul de monnaie et génération de facture PDF.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-triangle-exclamation me-2" style="color:var(--primary-color)"></i>Alertes de rupture</h5>
+                    <p>Détection automatique des stocks faibles et ruptures totales, avec notifications visuelles dans la sidebar.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-right-left me-2" style="color:var(--primary-color)"></i>Mouvements de stock</h5>
+                    <p>Entrées et sorties de stock avec historique complet, motifs personnalisés et traçabilité par fournisseur.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-users me-2" style="color:var(--primary-color)"></i>Fournisseurs & Commandes</h5>
+                    <p>Annuaire fournisseurs complet et suivi des commandes avec statuts (en attente, reçue, annulée).</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-chart-line me-2" style="color:var(--primary-color)"></i>Dashboard statistique</h5>
+                    <p>Visualisation en temps réel : valeur du stock, chiffre d'affaires mensuel, répartition par catégorie.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-shield-halved me-2" style="color:var(--primary-color)"></i>Authentification sécurisée</h5>
+                    <p>Système de connexion avec hashage bcrypt des mots de passe et gestion des sessions utilisateur.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-palette me-2" style="color:var(--primary-color)"></i>4 thèmes visuels</h5>
+                    <p>Thèmes Sombre, Clair, Bleu Nuit et Vert Terminal appliqués dynamiquement sur toute l'application.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="feature-item">
+                    <h5><i class="fas fa-file-export me-2" style="color:var(--primary-color)"></i>Export CSV & PDF</h5>
+                    <p>Export de l'historique des mouvements et du tableau de stock en CSV, génération de factures PDF stylées.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== INTERFACES ===== -->
+<section id="screens" class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center">Interfaces du Système</h2>
+        <p class="section-subtitle text-center mb-5">Découvrez les principaux écrans de l'application</p>
+
+        <div class="row g-4">
+            <!-- Écran 1 - Fenêtre principale -->
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="mock-screen">
+                            <img src="../assets/electrostock/interface_principal.png" alt="Fenêtre principale" class="screen-img">
+                        </div>
+                    </div>
+                    <div class="screen-info">
+                        <h5>Fenêtre principale</h5>
+                        <p>Tableau de stock avec recherche en direct, filtres par catégorie et sidebar des ruptures de stock.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Écran 2 - Panier -->
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="mock-screen">
+                            <img src="../assets/electrostock/dia_panier.png" alt="Panier de vente" class="screen-img">
+                        </div>
+                    </div>
+                    <div class="screen-info">
+                        <h5>Panier de vente</h5>
+                        <p>Gestion du panier client avec calcul automatique du total, de la monnaie et génération de facture.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Écran 3 - Dashboard -->
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="mock-screen">
+                            <img src="../assets/electrostock/dia_statistique.png" alt="Dashboard statistiques" class="screen-img">
+                        </div>
+                    </div>
+                    <div class="screen-info">
+                        <h5>Dashboard statistiques</h5>
+                        <p>Visualisation graphique des ventes, de la valeur du stock et de la répartition par catégorie.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Écran 4 - Fiche composant -->
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="mock-screen">
+                            <img src="../assets/electrostock/dia_infos.png" alt="Fiche composant" class="screen-img">
+                        </div>
+                    </div>
+                    <div class="screen-info">
+                        <h5>Fiche composant</h5>
+                        <p>Détails complets d'un composant : identification, niveau de stock, dates et notes techniques.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Écran 5 - Historique -->
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="mock-screen">
+                            <img src="../assets/electrostock/dia_historique.png" alt="Historique des mouvements" class="screen-img">
+                        </div>
+                    </div>
+                    <div class="screen-info">
+                        <h5>Historique des mouvements</h5>
+                        <p>Suivi complet des entrées et sorties de stock avec filtres par type, période et export CSV.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Écran 6 - Connexion -->
+            <div class="col-md-6 col-lg-4 fade-in">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="mock-screen">
+                            <img src="../assets/electrostock/dia_connexion.png" alt="Écran de connexion" class="screen-img">
+                        </div>
+                    </div>
+                    <div class="screen-info">
+                        <h5>Connexion sécurisée</h5>
+                        <p>Authentification avec hashage bcrypt et splashscreen animé au démarrage de l'application.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TECHNOLOGIES ===== -->
+<section id="technologies" class="section-dark">
+    <div class="container">
+        <h2 class="section-title fade-in">Technologies Utilisées</h2>
+        <p class="section-subtitle fade-in">Stack technique complète et performante</p>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="tech-card">
+                    <h5>// Interface</h5>
+                    <ul class="tech-list">
+                        <li>PySide6 / Qt Designer</li>
+                        <li>QSS (thèmes personnalisés)</li>
+                        <li>Matplotlib (graphiques)</li>
+                        <li>QPainter (splashscreen)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="tech-card">
+                    <h5>// Backend natif</h5>
+                    <ul class="tech-list">
+                        <li>C99</li>
+                        <li>CFFI (bridge Python/C)</li>
+                        <li>SQLite3 (amalgamation)</li>
+                        <li>Transactions atomiques</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="tech-card">
+                    <h5>// Sécurité & Données</h5>
+                    <ul class="tech-list">
+                        <li>bcrypt (hashage mdp)</li>
+                        <li>reportlab (facture PDF)</li>
+                        <li>CSV (export données)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="tech-card">
+                    <h5>// Outils de conception</h5>
+                    <ul class="tech-list">
+                        <li>Qt Designer</li>
+                        <li>GCC / MinGW</li>
+                        <li>VS Code</li>
+                        <li>Git versioning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== DEMO ===== -->
+<section id="demo">
+    <div class="container">
+        <h2 class="section-title fade-in">Démonstration Vidéo</h2>
+        <p class="section-subtitle fade-in">Découvrez ElecStock en action</p>
+        <div class="video-wrapper fade-in">
+            <video controls poster="../assets/electrostock/interface_principal.png">
+                <source src="../assets/elecstock/demo.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture vidéo HTML5.
+            </video>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PERSPECTIVES + CONCLUSION ===== -->
+<section class="section-dark">
+    <div class="container">
+        <div class="conclusion-card fade-in">
+            <h2 class="section-title">Perspectives d'évolution</h2>
+            <ul class="perspectives-list mt-3">
+                <li><i class="fas fa-barcode"></i> Intégration d'un scanner de codes-barres USB</li>
+                <li><i class="fas fa-qrcode"></i> Génération d'étiquettes QR code pour les tiroirs</li>
+                <li><i class="fas fa-file-invoice"></i> Numérotation automatique des factures</li>
+                <li><i class="fas fa-cloud-arrow-up"></i> Sauvegarde automatique et synchronisation cloud</li>
+                <li><i class="fas fa-file-csv"></i> Import en masse de composants depuis un fichier CSV</li>
+            </ul>
+
+            <h2 class="section-title mt-4">Conclusion</h2>
+            <p class="mt-3">
+                ElectroStock illustre la conception d'une <strong>application desktop professionnelle complète</strong>,
+                combinant une interface utilisateur moderne en Python/Qt avec un backend natif performant en C.
+                Ce projet met en avant une <strong>architecture hybride rigoureuse</strong>, allant de la
+                modélisation de base de données et l'écriture de transactions atomiques en C, jusqu'à la
+                conception d'une expérience utilisateur fluide, thématisable et adaptée à un usage professionnel
+                réel de gestion de stock.
+            </p>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap mt-4 fade-in">
+            <a href="../index.html#projects" class="btn-primary-custom">
+                <i class="fas fa-arrow-left"></i> Retour au Portfolio
+            </a>
+            <a href="https://github.com/SamKader/ElecStock.git" target="_blank" class="btn-outline-custom">
+                <i class="fab fa-github"></i> Voir sur GitHub
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <p>&copy; 2026 Hassane Samandoulgou — ElectroStock · Gestion de Stock Électronique</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Fade-in au scroll — même logique que script.js
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        document.querySelector('.navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+</script>
+
+</body>
+</html>
